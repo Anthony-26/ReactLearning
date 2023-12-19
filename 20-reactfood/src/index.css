@@ -260,3 +260,20 @@ h1 {
     transform: translateY(0);
   }
 }
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.error {
+  background-color: rgb(255, 171, 185); 
+  color: rgb(150, 0, 0); 
+  padding: 0.5rem;
+  border-radius: 4px;
+  width: fit-content;
+  margin: auto;
+  margin-top: 2rem;
+}
