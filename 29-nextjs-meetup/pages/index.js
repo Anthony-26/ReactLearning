@@ -27,10 +27,35 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-function HomePage() {
-  return (
-      <MeetupList meetups={DUMMY_MEETUPS} />
-  );
+function HomePage(props) {
+  return <MeetupList meetups={props.meetups} />;
+}
+
+/*  Runs on the server after deployment     */
+// export async function getServerSideProps(context) {
+//   /*    Only runs on the server, not on the client side   */
+
+//   const req = context.req;
+//   const res = context.res;
+
+//   return {
+//     props: {
+//       meetups: DUMMY_MEETUPS,
+//     },
+//   };
+// }
+
+export async function getStaticProps() {
+  /*    Never end up on a client side      */
+  /*    Executed during the build process  */
+
+  return {
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
+    /*  Tells NextJS the time waiting before the next refresh   */
+    revalidate: 10,
+  };
 }
 
 export default HomePage;
