@@ -1,31 +1,5 @@
+import { MongoClient } from 'mongodb';
 import MeetupList from '../components/meetups/MeetupList';
-
-const DUMMY_MEETUPS = [
-  {
-    id: 'm1',
-    title: 'First Meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg/1920px-Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg',
-    address: 'Some address 5, 12345, City',
-    description: 'First meetup',
-  },
-  {
-    id: 'm2',
-    title: 'Second Meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg/1920px-Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg',
-    address: 'Some address 5, 12345, City',
-    description: 'Second meetup',
-  },
-  {
-    id: 'm3',
-    title: 'Third Meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg/1920px-Rathaus_and_Marienplatz_from_Peterskirche_-_August_2006.jpg',
-    address: 'Some address 5, 12345, City',
-    description: 'Third meetup',
-  },
-];
 
 function HomePage(props) {
   return <MeetupList meetups={props.meetups} />;
@@ -48,10 +22,25 @@ function HomePage(props) {
 export async function getStaticProps() {
   /*    Never end up on a client side      */
   /*    Executed during the build process  */
+  const uri = process.env.MONGODB_URI;
+
+  const client = await MongoClient.connect(uri);
+  const db = client.db();
+
+  const meetupsCollection = db.collection('meetups');
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
 
   return {
     props: {
-      meetups: DUMMY_MEETUPS,
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
     },
     /*  Tells NextJS the time waiting before the next refresh   */
     revalidate: 10,
