@@ -34,9 +34,11 @@ function HomePage(props) {
 export async function getStaticProps() {
   /*    Never end up on a client side      */
   /*    Executed during the build process  */
-  const uri = process.env.MONGODB_URI;
+  // const uri = process.env.MONGODB_URI;
 
-  const client = await MongoClient.connect(uri);
+  const client = await MongoClient.connect(
+    'mongodb+srv://TestUser123:SWDqerbAtxduxg5R@cluster0.j6gl8rb.mongodb.net/meetups?retryWrites=true&w=majority'
+  );
   const db = client.db();
 
   const meetupsCollection = db.collection('meetups');
