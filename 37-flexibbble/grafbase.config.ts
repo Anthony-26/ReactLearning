@@ -15,17 +15,14 @@ g.datasource(mongodb);
 //   street: g.string().mapped('street_name'),
 // });
 
-const User = mongodb
-  .model('User', {
-    name: g.string().length({ min: 2, max: 20 }),
-    email: g.string().unique(),
-    avatarUrl: g.url(),
-    description: g.string().optional(),
-    githubUrl: g.url().optional(),
-    linkedInUrl: g.url().optional(),
-    projects: g.relation(),
-  })
-  .collection('users');
+const User = mongodb.model('User', {
+  name: g.string().length({ min: 2, max: 100 }),
+  email: g.string().unique(),
+  avatarUrl: g.url(),
+  description: g.string().length({ min: 2, max: 1000 }).optional(),
+  githubUrl: g.url().optional(),
+  linkedinUrl: g.url().optional(), 
+})
 
 const Project = mongodb.model('Project', {
   title: g.string().length({ min: 3 }),
@@ -33,8 +30,8 @@ const Project = mongodb.model('Project', {
   image: g.url(),
   liveSiteUrl: g.url(),
   githubUrl: g.url(),
-  category: g.string().search(),
-  createdBy: g.relation(() => User),
+  category: g.string(),
+  createdById: g.string(),
 });
 
 export default config({
